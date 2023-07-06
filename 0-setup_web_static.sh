@@ -22,7 +22,15 @@ for dir in "${directories[@]}"; do
 done
 
 # Create a fake HTML file for testing Nginx configuration
-echo "Testing Nginx configuration" > /data/web_static/releases/test/index.html
+cat <<EOF | sudo tee /data/web_static/current/index.html > /dev/null
+<html>
+  <head>
+  </head>
+  <body>
+    Testing Nginx Configuration
+  </body>
+</html>
+EOF
 
 # Create / recreate(if exists) a symbolic link
 if [ -L "/data/web_static/current" ]; then
