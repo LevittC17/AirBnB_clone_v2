@@ -34,7 +34,7 @@ ln -sf /data/web_static/releases/test/ /data/web_static/current
 chown -R ubuntu:ubuntu /data/
 
 # Update Nginx configuration to serve content to hbnb_static
-config_file="/etc/nginx/sites-available/default"
+config_file="/etc/nginx/sites-avaiable/default"
 alias_line="location /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n"
 if grep -q "location /hnbn_static/" "$config_file"; then
     sed -i /'location \/hbnb_static\//d' "$config_file"
