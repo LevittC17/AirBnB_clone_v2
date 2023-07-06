@@ -6,27 +6,26 @@ from the contents of the web_static folder
 of your AirBnB Clone repo, using the function do_pack
 """
 
-from fabric import Connection
+
+from fabric.api import local
 from datetime import datetime
 import os
 
 
 def do_pack():
-    # Creating 'versions' folder if it not exists
-    if not os.path.exists('versions'):
-        os.makedirs('versions')
+    """Create the versions folder if it doesn't exist"""
+    try:
+        if not os.path.exists("versions"):
+            os.makedirs("versions")
 
-    # Generate the final archive path using current timestamp
-    timesamp = datetime.now().strftime('%Y%m%d%H%M%S')
-    archive_name = f'web_static_{time_stamp}.tgz'
-    archive_path = os.path.join('versions', archive_name)
+        # Generate the archive path using the current timestamp
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        archive_name = "web_static_{}.tgz".format(timestamp)
+        archive_path = os.path.join("versions", archive_name)
 
-    # Creating the tar archive using tar command
-    tar_comm = f'tar -czvf {archive_path} web_static'
-    result = c.local(tar_command)
-
-    # Check if the tar command was successful
-    if result.ok:
+        local("tar -czvf {} web_static".format(archive_path))
         return archive_path
-    else:
+
+    except Exception as e:
+        print("An error occurred:", e)
         return None
