@@ -5,16 +5,16 @@ Deploying the archive
 base file -> 1-pack_web_static.py
 """
 
-from fabric.api import env, put, run
 import os
+from fabric.api import env, put, run
 
-
-
-# Set the web servers' IP addresses
+# Set the web servers' IP addresses and username
 env.hosts = ['18.207.140.105', '52.87.216.159']
+env.user = 'ubuntu'
+
 
 def do_deploy(archive_path):
-    """Deploys the archive to the web servers"""
+    """Deploys an archive to the servers"""
     if not os.path.exists(archive_path):
         return False
 
@@ -24,25 +24,24 @@ def do_deploy(archive_path):
 
         # Extract the archive to /data/web_static/releases/
         archive_filename = os.path.basename(archive_path)
-        archive_dirname = os.path.splitext(archive_filename)[0]
-        release_path = '/data/web_static/releases/{}'.format(archive_dirname)
-        run('mkdir -p {}'.format(release_path))
-        run('tar -xzf /tmp/{} -C {}'.format(archive_filename, release_path))
+        release_dir = '/data/web_static/releases/' + archive_filename[:-4]
+        run('mkdir -p {}'.format(release_dir))
+        run('tar -xzf /tmp/{} -C {}'.format(archive_filename, release_dir))
 
-        # Delete the uploaded archive
+        # Remove the uploaded archive
         run('rm /tmp/{}'.format(archive_filename))
 
         # Move the extracted files to the correct location
-        run('mv {}/web_static/* {}'.format(release_path, release_path))
+        run('mv {}/web_static/* {}'.format(release_dir, release_dir))
 
         # Remove the web_static symbolic link
-        run('rm -rf {}/web_static'.format(release_path))
+        run('rm -rf {}/web_static'.format(release_dir))
 
         # Delete the current symbolic link
         run('rm -rf /data/web_static/current')
 
         # Create a new symbolic link
-        run('ln -s {} /data/web_static/current'.format(release_path))
+        run('ln -s {} /data/web_static/current'.format(release_dir))
 
         print('New version deployed!')
         return True
