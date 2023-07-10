@@ -1,0 +1,17 @@
+.desc-amenities ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.desc-amenities ul li{
+    display: block;
+    margin-right: 10px;
+}
+.desc-amenities ul li i{
+    padding: 10px;
+    color: #363535;
+}
+.desc-amenities ul li span{
+    padding: 0;
+    color: #363535;
+}
